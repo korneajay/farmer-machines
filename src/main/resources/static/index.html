@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Farmer Machines - Smart Farm Machinery Hub</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Main Stylesheet -->
+    <link rel="stylesheet" href="index.css?v=4">
+</head>
+<body>
+    <!-- Interactive Background Layers -->
+    <div class="bg-interactive-layer"></div>
+    <div class="bg-interactive-glow"></div>
+
+    <!-- Background Overlay Layer (No Blur, HD) -->
+    <div class="bg-blur-overlay"></div>
+
+    <div class="app-container">
+        <!-- Header Section (Kisan-Urea Style) -->
+        <header class="app-header">
+            <div class="brand">
+                <div class="brand-icon">
+                    <img src="images/tractor-logo.png" alt="Farmer Machines logo">
+                </div>
+                <div class="brand-text">
+                    <h1>Farmer Machines</h1>
+                    <span class="tagline">Empowering Farmers, Enriching Fields</span>
+                </div>
+            </div>
+            
+            <!-- Horizontal Navigation Links -->
+            <nav class="nav-links">
+                <button class="nav-link active" data-tab="home">Home</button>
+                <button class="nav-link" data-tab="rent">Book Machinery</button>
+                <button class="nav-link" data-tab="host">Host Machinery</button>
+                <button class="nav-link" data-tab="map">Service Map</button>
+                <button class="nav-link" data-tab="about">About</button>
+                <div style="position:relative; display:flex; align-items:center; margin-left:8px;">
+                    <button id="btnLanguage" class="nav-link" style="padding:10px;" title="Change Language">
+                        <i class="fa-solid fa-language" style="font-size:1.3rem;"></i>
+                    </button>
+                    <div id="languageDropdown" class="search-dropdown hidden" style="min-width:130px; right:0; left:auto;">
+                        <div class="search-item" onclick="changeLanguage('en')">English</div>
+                        <div class="search-item" onclick="changeLanguage('hi')">हिन्दी (Hindi)</div>
+                        <div class="search-item" onclick="changeLanguage('te')">తెలుగు (Telugu)</div>
+                        <div class="search-item" onclick="changeLanguage('ta')">தமிழ் (Tamil)</div>
+                        <div class="search-item" onclick="changeLanguage('kn')">ಕನ್ನಡ (Kannada)</div>
+                        <div class="search-item" onclick="changeLanguage('mr')">मराठी (Marathi)</div>
+                        <div class="search-item" onclick="changeLanguage('pa')">ਪੰਜਾਬੀ (Punjabi)</div>
+                        <div class="search-item" onclick="changeLanguage('gu')">ગુજરાતી (Gujarati)</div>
+                    </div>
+                </div>
+                <button class="nav-link nav-link-admin hidden" data-tab="admin"><i class="fa-solid fa-shield-halved"></i> Admin</button>
+            </nav>
+
+            <!-- User Simulation Controls -->
+            <div class="user-simulator-controls">
+                <div id="activeUserHeaderWidget" class="active-user-widget hidden">
+                    <span id="headerUserName">Guest</span>
+                    <span id="headerUserRole" class="badge">ROLE</span>
+                </div>
+                
+                <div id="guestHeaderControls" class="search-wrapper">
+                    <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                    <input type="text" id="userSearchInput" placeholder="Search users..." autocomplete="off">
+                    <div id="userSearchDropdown" class="search-dropdown hidden"></div>
+                </div>
+                
+                <button id="btnOpenRegister" class="btn btn-primary btn-sm">
+                    <i class="fa-solid fa-right-to-bracket"></i> Login
+                </button>
+                <button id="btnLogout" class="btn btn-sm hidden" style="background:rgba(239,68,68,0.15);border-color:rgba(239,68,68,0.3);color:#ef4444;margin-left:8px;" title="Log Out">
+                    <i class="fa-solid fa-right-from-bracket"></i> Logout
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Dashboard View Area -->
+        <main class="main-content">
+            
+            <!-- 1. HOME VIEW (Welcome Panel & Persona prompts) -->
+            <div id="tab-home" class="tab-view active">
+                <!-- Logged Out Guest Welcome Panel -->
+                <div id="loggedOutWelcomePanel" class="glass-card welcome-panel">
+                    <div class="welcome-header">
+                        <div class="welcome-badge" style="background: rgba(16, 185, 129, 0.15); border: 2px solid var(--primary-light); color: var(--primary-light);">
+                            <i class="fa-solid fa-seedling"></i>
+                        </div>
+                        <div class="welcome-title-group">
+                            <h2>Welcome to Farmer Machines!</h2>
+                            <p>India's smart marketplace for agricultural machinery rentals. Rent high-quality tractors, combine harvesters, and rotavators with ease.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="welcome-actions-grid">
+                        <div class="welcome-action-card">
+                            <div class="card-icon" style="color: var(--primary-light);"><i class="fa-solid fa-tractor"></i></div>
+                            <h3>Rent Machinery</h3>
+                            <p>Need a tractor or combine harvester? Explore available machinery in your village and calculate the best rental paths.</p>
+                            <button class="btn btn-primary btn-sm" onclick="switchTab('rent')">Browse Machinery <i class="fa-solid fa-arrow-right"></i></button>
+                        </div>
+                        <div class="welcome-action-card">
+                            <div class="card-icon" style="color: var(--accent-light);"><i class="fa-solid fa-user-plus"></i></div>
+                            <h3>Host Machinery</h3>
+                            <p>Are you a machinery owner? Register your equipment, manage bookings, and receive requests from nearby farmers.</p>
+                            <button class="btn btn-outline btn-sm" onclick="openRegisterModal()">Login / Register <i class="fa-solid fa-arrow-right"></i></button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Logged In Welcome Panel -->
+                <div id="loggedInWelcomePanel" class="glass-card welcome-panel hidden">
+                    <div class="welcome-header">
+                        <div class="welcome-badge">
+                            <i class="fa-solid fa-tractor"></i>
+                        </div>
+                        <div class="welcome-title-group">
+                            <h2>Welcome back to FormerMachines!</h2>
+                            <p>Connecting smallholder Indian farmers with local machinery owners to democratize high-tech agricultural access.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="welcome-actions-grid">
+                        <div class="welcome-action-card">
+                            <div class="card-icon"><i class="fa-solid fa-user-gear"></i></div>
+                            <h3>Host Machinery</h3>
+                            <p>Register your tractors and harvesters, update details, and manage booking requests.</p>
+                            <button class="btn btn-outline btn-sm btn-go-host">Host Portal <i class="fa-solid fa-arrow-right"></i></button>
+                        </div>
+                        <div class="welcome-action-card">
+                            <div class="card-icon"><i class="fa-solid fa-map-location-dot"></i></div>
+                            <h3>Service Map</h3>
+                            <p>Explore the road network map, view available fleet counts, and calculate shortest routes.</p>
+                            <button class="btn btn-secondary btn-sm btn-go-map">Open Map <i class="fa-solid fa-arrow-right"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- 2. FARMER VIEW (Booking Portal) -->
+            <div id="tab-rent" class="tab-view hidden">
+                <div id="farmerLoginPrompt" class="glass-card select-persona-prompt">
+                    <i class="fa-solid fa-user-lock prompt-icon"></i>
+                    <h2>Farmer Portal Protected</h2>
+                    <p>Please log in with a Farmer account to book nearby machinery and view your OTP.</p>
+                    <div class="quick-buttons">
+                        <button class="btn btn-primary quick-login-btn" data-phone="9876543210" data-role="FARMER">
+                            <i class="fa-solid fa-right-to-bracket"></i> Login
+                        </button>
+                    </div>
+                </div>
+
+                <div id="farmerDashboard" class="dashboard-grid hidden">
+                    <div class="dashboard-panel">
+                        <div class="glass-card">
+                            <div class="card-header">
+                                <h3><i class="fa-solid fa-tractor"></i> Available Machinery</h3>
+                                <div class="filter-bar">
+                                    <button class="filter-chip active" data-equipment-filter="ALL">All</button>
+                                    <button class="filter-chip" data-equipment-filter="TRACTOR">Tractors</button>
+                                    <button class="filter-chip" data-equipment-filter="HARVESTER">Harvesters</button>
+                                    <button class="filter-chip" data-equipment-filter="ROTAVATOR">Rotavators</button>
+                                </div>
+                            </div>
+                            <div id="machineryList" class="machinery-list">
+                                <!-- Populated by JS -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="dashboard-panel">
+                        <div class="glass-card">
+                            <div class="card-header">
+                                <h3><i class="fa-solid fa-receipt"></i> My Bookings</h3>
+                                <button id="btnRefreshFarmerBookings" class="btn btn-icon" title="Refresh">
+                                    <i class="fa-solid fa-rotate"></i>
+                                </button>
+                            </div>
+                            <div id="farmerDetailsStrip" class="farmer-details-strip hidden"></div>
+                            <div id="farmerBookingsList" class="bookings-list">
+                                <!-- Populated by JS -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- 3. HOST MACHINERY VIEW (Owner Portal) -->
+            <div id="tab-host" class="tab-view hidden">
+                <!-- If Not Logged In as Owner -->
+                <div id="ownerLoginPrompt" class="glass-card select-persona-prompt">
+                    <i class="fa-solid fa-user-lock prompt-icon"></i>
+                    <h2>Owner Portal Protected</h2>
+                    <p>Please log in with an Owner account to manage your fleet and accept requests.</p>
+                    <div class="quick-buttons">
+                        <button class="btn btn-primary quick-login-btn" data-phone="9988776655" data-role="OWNER">
+                            <i class="fa-solid fa-right-to-bracket"></i> Login
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Logged In Owner Dashboard -->
+                <div id="ownerDashboard" class="dashboard-grid hidden">
+                    <!-- Left: Fleet Registry & Fleet List -->
+                    <div class="dashboard-panel">
+                        <div class="glass-card">
+                            <div class="card-header">
+                                <h3><i class="fa-solid fa-plus-circle"></i> Register New Machinery</h3>
+                            </div>
+                            <form id="frmAddEquipment" class="form-grid">
+                                <div class="form-group">
+                                    <label for="eqType">Machinery Type</label>
+                                    <select id="eqType" required>
+                                        <option value="TRACTOR">Tractor</option>
+                                        <option value="HARVESTER">Combine Harvester</option>
+                                        <option value="ROTAVATOR">Rotavator</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="eqBrandModel">Brand & Model</label>
+                                    <input type="text" id="eqBrandModel" placeholder="e.g. John Deere 5050D" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="eqRegNum">Registration Number</label>
+                                    <input type="text" id="eqRegNum" placeholder="e.g. UP-15-AB-1234" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="eqCost">Cost Per Hour (₹)</label>
+                                    <input type="number" id="eqCost" placeholder="e.g. 500" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="eqAcres">Acres covered per hour</label>
+                                    <input type="number" step="0.1" id="eqAcres" placeholder="e.g. 1.2" required>
+                                </div>
+                                <div class="form-group col-span-2">
+                                    <label for="eqDesc">Brief Description</label>
+                                    <textarea id="eqDesc" rows="2" placeholder="Attachments, conditions..."></textarea>
+                                </div>
+                                <button type="submit" class="btn btn-primary col-span-2">
+                                    <i class="fa-solid fa-check"></i> Register Machinery
+                                </button>
+                            </form>
+                        </div>
+
+                        <div class="glass-card">
+                            <div class="card-header">
+                                <h3><i class="fa-solid fa-toolbox"></i> My Fleet</h3>
+                            </div>
+                            <div id="ownerFleetList" class="fleet-list">
+                                <!-- Populated by JS -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right: Booking Requests -->
+                    <div class="dashboard-panel">
+                        <div class="glass-card">
+                            <div class="card-header">
+                                <h3><i class="fa-solid fa-bell"></i> Booking Requests</h3>
+                                <button id="btnRefreshOwnerBookings" class="btn btn-icon">
+                                    <i class="fa-solid fa-rotate"></i>
+                                </button>
+                            </div>
+                            <div id="ownerBookingsList" class="bookings-list">
+                                <!-- Populated by JS -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 4. SERVICE MAP & PATHFINDER VIEW -->
+            <div id="tab-map" class="tab-view hidden">
+                <div class="dashboard-grid">
+                    <!-- Left: Interactive Route Map -->
+                    <div class="glass-card map-card">
+                        <div class="card-header">
+                            <h3><i class="fa-solid fa-map-location-dot"></i> Service Network Map</h3>
+                            <div class="map-legend">
+                                <span class="legend-item"><span class="legend-dot village"></span> Village</span>
+                                <span class="legend-item"><span class="legend-dot path"></span> active route</span>
+                            </div>
+                        </div>
+                        
+                        <div class="map-view-wrapper">
+                            <svg id="villageMapSvg" viewBox="0 0 1000 800" preserveAspectRatio="xMidYMid meet">
+                                <defs>
+                                    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+                                        <feGaussianBlur stdDeviation="8" result="blur" />
+                                        <feComposite in="SourceGraphic" in2="blur" operator="over" />
+                                    </filter>
+                                </defs>
+                                <g id="mapRoadsGroup"></g>
+                                <g id="mapNodesGroup"></g>
+                                <g id="mapLabelsGroup"></g>
+                            </svg>
+                        </div>
+                    </div>
+
+                    <!-- Right: Dijkstra Route Finder -->
+                    <div class="glass-card pathfinder-card">
+                        <div class="card-header">
+                            <h3><i class="fa-solid fa-route"></i> Dijkstra Pathfinding Utility</h3>
+                        </div>
+                        <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:10px;">Select start/destination villages on the map or use the dropdowns to trace the shortest path route.</p>
+                        <div class="pathfinder-controls form-grid">
+                            <div class="form-group">
+                                <label for="pathStart">Start Village</label>
+                                <select id="pathStart" required>
+                                    <option value="" disabled selected>Select start...</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="pathEnd">Destination Village</label>
+                                <select id="pathEnd" required>
+                                    <option value="" disabled selected>Select destination...</option>
+                                </select>
+                            </div>
+                            <button id="btnFindPath" class="btn btn-accent col-span-2">
+                                <i class="fa-solid fa-location-arrow"></i> Calculate Shortest Path
+                            </button>
+                        </div>
+                        <div id="pathResults" class="path-results-container hidden">
+                            <div class="result-metric">
+                                <span class="metric-label">Shortest Distance</span>
+                                <span id="routeDistance" class="metric-value">0.0 km</span>
+                            </div>
+                            <div class="result-route">
+                                <span class="metric-label">Route Sequence</span>
+                                <div id="routeSequence" class="route-nodes">
+                                    <!-- Populate by JS -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 5. ABOUT VIEW (Mission, Process, and Stats) -->
+            <div id="tab-about" class="tab-view hidden">
+                <div class="home-hero">
+                    <h2>FormerMachines Platform</h2>
+                    <p>Connecting smallholder Indian farmers with local machinery owners to democratize high-tech agricultural access.</p>
+                </div>
+                
+                <div class="home-grid">
+                    <!-- Column 1: Our Mission -->
+                    <div class="glass-card home-card">
+                        <h2 class="home-card-title"><i class="fa-solid fa-seedling"></i> Our Mission</h2>
+                        <p class="home-card-text">
+                            FormerMachines is a digital marketplace designed to address the challenges of farm mechanization in rural India. Our mission is to prevent crop losses during critical harvest seasons, eliminate machine supply deficits, and guarantee that every farmer has access to fair and affordable tractor and harvester rentals.
+                        </p>
+                    </div>
+
+                    <!-- Column 2: How It Works -->
+                    <div class="glass-card home-card">
+                        <h2 class="home-card-title"><i class="fa-solid fa-list-check"></i> How It Works</h2>
+                        <ul class="home-bullet-list">
+                            <li>
+                                <strong>Logistics Routing:</strong> Calculate travel delivery costs dynamically based on the shortest road path between villages.
+                            </li>
+                            <li>
+                                <strong>Secure OTP Verification:</strong> Secure your booking tokens. The operator must verify a 4-digit OTP from the farmer upon arriving at the field.
+                            </li>
+                            <li>
+                                <strong>Fleet Utilization:</strong> Help local equipment owners rent out idle machinery (tractors, rotavators, combine harvesters) to nearby farms.
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Stats Footer Row -->
+                <div class="stats-row">
+                    <div class="glass-card stat-card">
+                        <span class="stat-number">7+</span>
+                        <span class="stat-label">Connected Villages</span>
+                    </div>
+                    <div class="glass-card stat-card">
+                        <span class="stat-number">15+</span>
+                        <span class="stat-label">Active Farm Machines</span>
+                    </div>
+                    <div class="glass-card stat-card">
+                        <span class="stat-number">₹300/hr</span>
+                        <span class="stat-label">Starting Rental Cost</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 5. ADMIN PANEL VIEW -->
+            <div id="tab-admin" class="tab-view hidden">
+                <!-- Guard: not admin -->
+                <div id="adminLoginPrompt" class="glass-card select-persona-prompt hidden">
+                    <i class="fa-solid fa-shield-halved prompt-icon" style="color:var(--purple);"></i>
+                    <h2>Admin Portal</h2>
+                    <p>Only administrators can access this panel.</p>
+                </div>
+
+                <!-- Admin Dashboard -->
+                <div id="adminDashboard" class="hidden">
+                    <!-- Stats row -->
+                    <div id="adminStatsRow" class="admin-stats-row"></div>
+
+                    <!-- User Management -->
+                    <div class="glass-card">
+                        <div class="card-header">
+                            <h3><i class="fa-solid fa-users-gear"></i> User Management</h3>
+                            <div style="display:flex;gap:8px;align-items:center;">
+                                <input type="text" id="adminUserSearch" placeholder="Search users..." class="admin-search-input">
+                                <button id="btnRefreshAdminUsers" class="btn btn-icon" title="Refresh">
+                                    <i class="fa-solid fa-rotate"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <!-- Role filter tabs -->
+                        <div class="filter-bar">
+                            <button class="filter-chip active" data-role-filter="ALL">All</button>
+                            <button class="filter-chip" data-role-filter="FARMER">Farmers</button>
+                            <button class="filter-chip" data-role-filter="OWNER">Owners</button>
+                            <button class="filter-chip" data-role-filter="ADMIN">Admins</button>
+                        </div>
+                        <div id="adminUsersTable" class="admin-table-wrapper">
+                            <!-- Populated by JS -->
+                        </div>
+                    </div>
+
+                    <!-- All Bookings Management -->
+                    <div class="glass-card">
+                        <div class="card-header">
+                            <h3><i class="fa-solid fa-calendar-days"></i> All Bookings</h3>
+                            <button id="btnRefreshAdminBookings" class="btn btn-icon">
+                                <i class="fa-solid fa-rotate"></i>
+                            </button>
+                        </div>
+                        <div id="adminBookingsList" class="bookings-list">
+                            <!-- Populated by JS -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+
+        <!-- Footer -->
+        <footer class="app-footer" style="margin-top: auto; padding: 25px 0px; text-align: center; color: var(--text-muted); border-top: 1px solid rgba(255, 255, 255, 0.08); background: transparent;">
+            <div style="margin-bottom: 12px; font-family: var(--font-title); font-size: 1.1rem; color: white;">
+                <strong>Farmer Machines</strong> &copy; 2026. All rights reserved.
+            </div>
+            <div style="font-size: 0.9rem; display: flex; justify-content: center; gap: 20px; flex-wrap: wrap;">
+                <span><i class="fa-solid fa-envelope" style="color:var(--primary-light);"></i> support@farmermachines.com</span>
+                <span><i class="fa-solid fa-phone" style="color:var(--primary-light);"></i> +91 8187872374</span>
+                <span><i class="fa-solid fa-location-dot" style="color:var(--primary-light);"></i> Punjab, India</span>
+            </div>
+            <div style="font-size: 0.8rem; margin-top: 12px; opacity: 0.8;">
+                Empowering farmers by democratizing access to high-tech agricultural machinery.
+            </div>
+        </footer>
+    </div>
+
+    <!-- MODAL: CREATE BOOKING -->
+    <div id="bookingModal" class="modal-overlay hidden">
+        <div class="glass-card modal-card">
+            <div class="modal-header">
+                <h2><i class="fa-solid fa-calendar-plus" style="margin-right:8px;"></i>Book Machinery</h2>
+                <button id="btnCloseBooking" class="btn btn-icon">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <form id="frmCreateBooking" class="form-grid">
+                <input type="hidden" id="bookingEquipmentId">
+                <div id="bookingMachineDetails" class="booking-machine-preview col-span-2"></div>
+                <div class="form-group">
+                    <label for="bkHours">Hours Required</label>
+                    <input type="number" id="bkHours" min="1" value="2" required>
+                </div>
+                <div class="form-group">
+                    <label for="bkCrop">Crop Type</label>
+                    <select id="bkCrop" required>
+                        <option value="" disabled selected>Select crop...</option>
+                        <option value="Wheat">Wheat</option>
+                        <option value="Rice/Paddy">Rice / Paddy</option>
+                        <option value="Sugarcane">Sugarcane</option>
+                        <option value="Cotton">Cotton</option>
+                        <option value="Maize">Maize</option>
+                        <option value="Mustard">Mustard</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+                <div class="form-group col-span-2">
+                    <label for="bkAddress">Field Address</label>
+                    <textarea id="bkAddress" rows="2" required></textarea>
+                </div>
+                <div class="booking-cost-estimate col-span-2">
+                    <div class="estimate-row">
+                        <span>Rental rate</span>
+                        <strong id="estRate">Rs 0/hr</strong>
+                    </div>
+                    <div class="estimate-row">
+                        <span>Travel estimate</span>
+                        <strong id="estTravelCost">Rs 0</strong>
+                    </div>
+                    <div class="estimate-row total">
+                        <span>Total estimate</span>
+                        <strong id="estTotal">Rs 0</strong>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary col-span-2">
+                    <i class="fa-solid fa-check"></i> Submit Booking
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL: LOGIN / REGISTER -->
+    <div id="registerModal" class="modal-overlay hidden">
+        <div class="glass-card modal-card">
+            <div class="modal-header">
+                <h2 id="loginModalTitle"><i class="fa-solid fa-right-to-bracket" style="margin-right:8px;"></i>Login</h2>
+                <button id="btnCloseRegister" class="btn btn-icon">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <!-- STEP 0: Choose Role -->
+            <div id="loginStep0" class="login-step">
+                <p class="step-hint">Who are you logging in as?</p>
+                <div class="role-tile-grid">
+                    <button class="role-tile" id="roleTileFarmer" data-role="FARMER">
+                        <div class="role-tile-icon farmer">
+                            <i class="fa-solid fa-seedling"></i>
+                        </div>
+                        <div class="role-tile-label">Farmer</div>
+                    </button>
+                    <button class="role-tile" id="roleTileMachinery" data-role="OWNER">
+                        <div class="role-tile-icon owner">
+                            <i class="fa-solid fa-tractor"></i>
+                        </div>
+                        <div class="role-tile-label">Machinery</div>
+                    </button>
+                    <button class="role-tile" id="roleTileAdmin" data-role="ADMIN">
+                        <div class="role-tile-icon admin">
+                            <i class="fa-solid fa-shield-halved"></i>
+                        </div>
+                        <div class="role-tile-label">Admin</div>
+                    </button>
+                </div>
+            </div>
+
+            <!-- STEP 1: Phone Check -->
+            <div id="loginStep1" class="login-step hidden">
+                <div class="step-role-header" id="step1RoleHeader"></div>
+                <p class="step-hint">Enter your phone number to login or create an account.</p>
+                <div class="login-input-row">
+                    <div style="position:relative;flex:1;">
+                        <i class="fa-solid fa-phone" style="position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--primary-light);font-size:0.9rem;"></i>
+                        <input type="tel" id="loginPhone" placeholder="10-digit phone number" maxlength="10" style="padding-left:36px;width:100%;">
+                    </div>
+                    <button id="btnCheckPhone" class="btn btn-primary">
+                        <i class="fa-solid fa-arrow-right"></i> Check
+                    </button>
+                </div>
+                <button id="btnBackStep0" class="btn btn-outline" style="width:100%;margin-top:4px;">
+                    <i class="fa-solid fa-arrow-left"></i> Choose Different Role
+                </button>
+            </div>
+
+            <!-- STEP 2a: User Found -->
+            <div id="loginStep2Found" class="login-step hidden">
+                <div class="found-user-card">
+                    <div class="found-user-avatar" id="foundUserAvatar"><i class="fa-solid fa-user"></i></div>
+                    <div class="found-user-info">
+                        <div id="foundUserName" class="found-user-name">Name</div>
+                        <div id="foundUserMeta" class="found-user-meta">Role • Village</div>
+                    </div>
+                    <span id="foundUserRoleBadge" class="badge">ROLE</span>
+                </div>
+                <div class="login-otp-panel">
+                    <div class="login-otp-display">
+                        <span>Login OTP</span>
+                        <strong id="loginOtpPreview">0000</strong>
+                    </div>
+                    <div class="login-input-row">
+                        <div style="position:relative;flex:1;">
+                            <i class="fa-solid fa-key" style="position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--primary-light);font-size:0.9rem;"></i>
+                            <input type="tel" id="loginOtpInput" placeholder="Enter 4-digit OTP" maxlength="4" style="padding-left:36px;width:100%;">
+                        </div>
+                    </div>
+                </div>
+                <div style="display:flex;gap:10px;margin-top:4px;">
+                    <button id="btnConfirmLogin" class="btn btn-primary" style="flex:1;">
+                        <i class="fa-solid fa-right-to-bracket"></i> Verify & Login as <span id="foundUserShortName"></span>
+                    </button>
+                    <button id="btnBackStep1" class="btn btn-outline">
+                        <i class="fa-solid fa-arrow-left"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- STEP 2b: User Not Found – Register -->
+            <div id="loginStep2Register" class="login-step hidden">
+                <div class="not-found-hint">
+                    <i class="fa-solid fa-user-plus"></i>
+                    No account found for this number. Create one below:
+                </div>
+                <form id="frmRegisterUser" class="form-grid">
+                    <div class="form-group">
+                        <label for="regName">Full Name</label>
+                        <input type="text" id="regName" placeholder="e.g. Rajesh Kumar" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="regPhone">Phone Number</label>
+                        <input type="tel" id="regPhone" placeholder="10-digit number" pattern="[0-9]{10}" required readonly style="opacity:0.6;">
+                    </div>
+                    <div class="form-group hidden">
+                        <label for="regRole">Role</label>
+                        <select id="regRole" required>
+                            <option value="FARMER">Farmer (Hire Machinery)</option>
+                            <option value="OWNER">Equipment Owner (Provide Machinery)</option>
+                            <option value="ADMIN">Admin (Platform Management)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="regVillage">Home Village</label>
+                        <select id="regVillage" required>
+                            <!-- Populated by JS -->
+                        </select>
+                    </div>
+                    <div id="ownerFieldsGroup" class="col-span-2 form-grid hidden" style="border-top: 1px solid rgba(255,255,255,0.1); padding-top: 15px; margin-top: 5px;">
+                        <div class="form-group">
+                            <label for="regAadhaar">Aadhaar Number (12 digit)</label>
+                            <input type="text" id="regAadhaar" placeholder="e.g. 123456789012" pattern="[0-9]{12}">
+                        </div>
+                        <div class="form-group">
+                            <label for="regDL">Driving License Number</label>
+                            <input type="text" id="regDL" placeholder="e.g. DL12345">
+                        </div>
+                    </div>
+                    <div style="display:flex;gap:10px;" class="col-span-2">
+                        <button type="button" id="btnBackStep1b" class="btn btn-outline">
+                            <i class="fa-solid fa-arrow-left"></i> Back
+                        </button>
+                        <button type="submit" class="btn btn-primary" style="flex:1;">
+                            <i class="fa-solid fa-check"></i> Register &amp; Login
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: EDIT USER (Admin) -->
+    <div id="editUserModal" class="modal-overlay hidden">
+        <div class="glass-card modal-card">
+            <div class="modal-header">
+                <h2><i class="fa-solid fa-user-pen" style="margin-right:8px;"></i>Edit User</h2>
+                <button id="btnCloseEditUser" class="btn btn-icon"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <form id="frmEditUser" class="form-grid">
+                <input type="hidden" id="editUserId">
+                <div class="form-group">
+                    <label for="editUserName">Full Name</label>
+                    <input type="text" id="editUserName" required>
+                </div>
+                <div class="form-group">
+                    <label for="editUserPhone">Phone</label>
+                    <input type="tel" id="editUserPhone" maxlength="10" required>
+                </div>
+                <div class="form-group">
+                    <label for="editUserRole">Role</label>
+                    <select id="editUserRole">
+                        <option value="FARMER">Farmer</option>
+                        <option value="OWNER">Owner</option>
+                        <option value="ADMIN">Admin</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="editUserVillage">Village</label>
+                    <select id="editUserVillage"></select>
+                </div>
+                <div class="form-group">
+                    <label for="editUserAadhaar">Aadhaar</label>
+                    <input type="text" id="editUserAadhaar" placeholder="12-digit Aadhaar">
+                </div>
+                <div class="form-group">
+                    <label for="editUserDL">Driving License</label>
+                    <input type="text" id="editUserDL" placeholder="License No.">
+                </div>
+                <button type="submit" class="btn btn-primary col-span-2">
+                    <i class="fa-solid fa-floppy-disk"></i> Save Changes
+                </button>
+            </form>
+        </div>
+    </div>
+
+
+    <!-- Toast Notification Container -->
+    <div id="toastContainer" class="toast-container"></div>
+    
+    <!-- Google Translate Script (Hidden) -->
+    <div id="google_translate_element" style="display:none;"></div>
+    <script type="text/javascript">
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement({
+                pageLanguage: 'en',
+                includedLanguages: 'en,hi,te,ta,kn,mr,pa,gu',
+                autoDisplay: false
+            }, 'google_translate_element');
+        }
+    </script>
+    <script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
+    <!-- App Script -->
+    <script src="index.js?v=11"></script>
+</body>
+</html>
